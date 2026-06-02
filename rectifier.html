@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lesson: AC to DC Rectification</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
+            --accent-dark: #1b5e20;
+            --border-color: #cccccc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--text-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-placeholder {
+            border: 2px solid var(--text-color);
+            padding: 5px 15px;
+            font-weight: bold;
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--text-color);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            border-left: 5px solid var(--text-color);
+            padding-left: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intro-box {
+            background-color: var(--light-green);
+            border: 1px solid var(--primary-green);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        /* Tabs configuration */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: var(--light-green);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Sandbox & Visualization Styles */
+        .sandbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sandbox-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary-green);
+        }
+
+        .btn {
+            background-color: var(--text-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-green);
+        }
+
+        /* Canvas Signal Display */
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            background-color: #111111;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Knowledge Check Format */
+        .quiz-container {
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .question:last-child {
+            border-bottom: none;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .option-item {
+            margin-bottom: 8px;
+        }
+
+        .option-item input {
+            margin-right: 10px;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            color: var(--primary-green);
+            display: block;
+        }
+
+        .feedback.incorrect {
+            color: #d32f2f;
+            display: block;
+        }
+
+        /* Formula styling */
+        .formula-box {
+            background: #ffffff;
+            border-left: 4px solid var(--primary-green);
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        /* Circuit Schematics Placeholder Styling */
+        .circuit-schematic {
+            width: 100%;
+            height: 15px;
+            background: #f0f0f0;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            font-style: italic;
+            color: #555;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>Power Electronics: Theory & Applications</h1>
+            <p>Instructional Unit: AC to DC Rectification Architectures</p>
+        </div>
+        <div class="logo-placeholder">AI & CYBERSEC LAB</div>
+    </header>
+
+    <div class="intro-box">
+        <h3>Welcome, Students</h3>
+        <p>This self-paced module introduces the core mechanics of electronic rectification. By manipulating structural parameters in the simulations below, you will observe how topologies alter voltage output, ripple configurations, and overall conversion efficiency.</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'half-wave')">1. Half-Wave</button>
+        <button class="tab-btn" onclick="switchTab(event, 'full-wave')">2. Center-Tapped Full-Wave</button>
+        <button class="tab-btn" onclick="switchTab(event, 'full-bridge')">3. Full-Bridge</button>
+        <button class="tab-btn" onclick="switchTab(event, 'sandbox')">4. Interactive Lab Simulator</button>
+        <button class="tab-btn" onclick="switchTab(event, 'assessment')">5. Knowledge Check</button>
+    </div>
+
+    <div id="half-wave" class="tab-content active">
+        <h2>Half-Wave Rectification</h2>
+        <p>The simplest configuration leverages a single diode placed in series with an alternating current supply. Because a diode allows current flow in only one direction, it conducts exclusively during one half-cycle of the AC input framework.</p>
+        
+        <div class="circuit-schematic">[Circuit Diagram: AC Source → Single Diode → Resistive Load Pair]</div>
+
+        <h3>Key Behavioral Mechanics</h3>
+        <ul>
+            <li><strong>Positive Half-Cycle:</strong> The diode becomes forward-biased, operating as an ideal closed switch. The input voltage transfers to the load.</li>
+            <li><strong>Negative Half-Cycle:</strong> The diode undergoes reverse-bias, performing as an open circuit. Output drops directly to zero.</li>
+        </ul>
+
+        <div class="formula-box">
+            Average Output Voltage (V_avg) = V_peak / &pi; &asymp; 0.318 &times; V_peak<br>
+            Ripple Frequency = Input Frequency (f_in)
+        </div>
+        
+        <p><strong>Major Limitation:</strong> Highly inefficient (max theoretical efficiency of 40.6%). It introduces a massive distortion factor and leaves half of the available power completely unused.</p>
+    </div>
+
+    <div id="full-wave" class="tab-content">
+        <h2>Center-Tapped Full-Wave Rectifier</h2>
+        <p>To capture both halves of the AC loop, this architecture utilizes a specialized center-tapped transformer paired alongside two distinct diodes. The center tap establishes a central reference point, splitting the secondary winding voltage into two opposing phases.</p>
+        
+        <div class="circuit-schematic">[Circuit Diagram: Center-Tapped Transformer Secondary → Upper/Lower Diodes → Shared Load]</div>
+
+        <h3>Key Behavioral Mechanics</h3>
+        <ul>
+            <li><strong>Positive Half-Cycle:</strong> Top diode conducts; bottom diode is reverse-biased.</li>
+            <li><strong>Negative Half-Cycle:</strong> Top diode shuts down; bottom diode flips into forward-bias, continuing current flow across the load in the <em>exact same direction</em>.</li>
+        </ul>
+
+        <div class="formula-box">
+            Average Output Voltage (V_avg) = 2 &times; V_peak / &pi; &asymp; 0.636 &times; V_peak<br>
+            Ripple Frequency = 2 &times; Input Frequency (2f_in)
+        </div>
+
+        <p><strong>Trade-offs:</strong> Maximum efficiency climbs to 81.2%. However, each diode must withstand twice the peak inverse voltage (2 &times; V_peak) compared to a half-wave system, requiring more robust components.</p>
+    </div>
+
+    <div id="full-bridge" class="tab-content">
+        <h2>Full-Bridge Rectifier</h2>
+        <p>The industry standard for efficient power transformation. By utilizing four interlocking diodes configured in a diamond loop topology, the bridge rectifier captures both half-cycles without requiring an expensive, heavy center-tapped transformer.</p>
+        
+        <div class="circuit-schematic">[Circuit Diagram: 4-Diode Bridge Matrix (D1-D4) surrounding a Central Load]</div>
+
+        <h3>Key Behavioral Mechanics</h3>
+        <ul>
+            <li><strong>Positive Half-Cycle:</strong> Diodes D1 and D2 conduct in series, routing current down through the load.</li>
+            <li><strong>Negative Half-Cycle:</strong> Diodes D3 and D4 turn on, routing the reversed input current through the load in the exact same native direction.</li>
+        </ul>
+
+        <div class="formula-box">
+            Average Output Voltage (V_avg) = 2 &times; V_peak / &pi; &asymp; 0.636 &times; V_peak<br>
+            Diode Peak Inverse Voltage (PIV) = V_peak (Optimized component cost)
+        </div>
+
+        <p><strong>Design Advantage:</strong> Achieves full 81.2% conversion efficiency without doubling the mandatory component PIV metrics. The primary compromise is a minor dual-diode forward voltage drop (typically 2 &times; 0.7V = 1.4V total loss).</p>
+    </div>
+
+    <div id="sandbox" class="tab-content">
+        <h2>Interactive Performance Sandbox</h2>
+        <p style="margin-bottom: 20px;">Alter parameters dynamically to see how different rectification models handle ripples, filtration adjustments, and component stress constraints.</p>
+
+        <div class="sandbox-grid">
+            <div class="panel">
+                <h3>Parameters Panel</h3>
+                <div class="controls" style="margin-top: 15px;">
+                    <div class="control-group">
+                        <label for="topology-select">Rectifier Architecture:</label>
+                        <select id="topology-select" onchange="updateSimulation()" style="padding: 8px; border: 1px solid var(--text-color);">
+                            <option value="halfwave">Half-Wave Rectifier</option>
+                            <option value="fullwave">Center-Tapped Full-Wave</option>
+                            <option value="bridge">Full-Bridge Rectifier</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="voltage-slider">Peak Input Voltage (V_peak): <span id="v-val">10</span>V</label>
+                        <input type="range" id="voltage-slider" min="2" max="24" value="12" oninput="updateSimulation()">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="filter-slider">Filter Capacitor (Capacitance): <span id="c-val">0</span> &mu;F</label>
+                        <input type="range" id="filter-slider" min="0" max="100" value="0" oninput="updateSimulation()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel canvas-container">
+                <h3>Oscilloscope Output Monitor</h3>
+                <canvas id="scopeCanvas" width="500" height="250"></canvas>
+                <div class="legend">
+                    <div class="legend-item"><span style="color:#00ff00; background:#00ff00; display:inline-block; width:12px; height:12px;"></span> Input AC</div>
+                    <div class="legend-item"><span style="color:#ffffff; background:#ffffff; display:inline-block; width:12px; height:12px;"></span> Rectified DC</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="assessment" class="tab-content">
+        <h2>Knowledge Check & Mastery Review</h2>
+        <p>Verify your conceptual grip on the material below. Instant analytical feedback is rendered upon selection.</p>
+
+        <div class="quiz-container">
+            <div class="question" id="q1">
+                <p><strong>1. Why does a Standard Bridge Rectifier generally outclass a Center-Tapped setup in consumer electronics design?</strong></p>
+                <ul class="options-list">
+                    <li class="option-item"><label><input type="radio" name="rad1" onclick="checkAnswer('q1', 'B', 'Correct! It circumvents the bulk/expense of a custom multi-tap transformer framework while retaining optimal efficiency.')"> It delivers double the average output voltage magnitude.</label></li>
+                    <li class="option-item"><label><input type="radio" name="rad1" onclick="checkAnswer('q1', 'A', 'Incorrect. Review transformer load properties again.')"> It operates without requiring a transformer component entirely.</label></li>
+                    <li class="option-item"><label><input type="radio" name="rad1" onclick="checkAnswer('q1', 'C', 'Incorrect. It delivers full efficiency without requiring dual peak inverse voltage ratings.')"> It operates with half the number of active diodes.</label></li>
+                </ul>
+                <div class="feedback" id="fb-q1"></div>
+            </div>
+
+            <div class="question" id="q2">
+                <p><strong>2. If an AC signal running at 60 Hz feeds a Center-Tapped Full-Wave Rectifier, what is the resulting output ripple frequency?</strong></p>
+                <ul class="options-list">
+                    <li class="option-item"><label><input type="radio" name="rad2" onclick="checkAnswer('q2', 'A', 'Incorrect. Remember that full-wave architectures flip the inverted wave, doubling frequency events.')"> 30 Hz</label></li>
+                    <li class="option-item"><label><input type="radio" name="rad2" onclick="checkAnswer('q2', 'B', 'Incorrect. A regular half-wave rectifier maintains 60 Hz.')"> 60 Hz</label></li>
+                    <li class="option-item"><label><input type="radio" name="rad2" onclick="checkAnswer('q2', 'C', 'Correct! Full rectification doubles frequency metrics to 120 Hz, facilitating easier smoothing.')"> 120 Hz</label></li>
+                </ul>
+                <div class="feedback" id="fb-q2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching engine
+    function switchTab(evt, tabId) {
+        const contents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < contents.length; i++) {
+            contents[i].classList.remove("active");
+        }
+        
+        const buttons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+        
+        document.getElementById(tabId).classList.add("active");
+        evt.currentTarget.classList.add("active");
+
+        if(tabId === 'sandbox') {
+            // Trigger animation frame loop on canvas activation
+            setTimeout(updateSimulation, 50);
+        }
+    }
+
+    // Quiz evaluation engine
+    function checkAnswer(qId, type, message) {
+        const feedbackBox = document.getElementById('fb-' + qId);
+        feedbackBox.innerText = message;
+        if(type === 'C' || message.startsWith('Correct')) {
+            feedbackBox.className = "feedback correct";
+        } else {
+            feedbackBox.className = "feedback incorrect";
+        }
+    }
+
+    // Oscilloscope Interactive Simulation Canvas Engine
+    function updateSimulation() {
+        const canvas = document.getElementById('scopeCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        // Dynamic Variable Extraction
+        const topology = document.getElementById('topology-select').value;
+        const vPeak = parseFloat(document.getElementById('voltage-slider').value);
+        const filterVal = parseFloat(document.getElementById('filter-slider').value);
+        
+        // Update readout metrics labels
+        document.getElementById('v-val').innerText = vPeak;
+        document.getElementById('c-val').innerText = filterVal;
+
+        // Clear display grid
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Render Scope Background Grid Gridlines
+        ctx.strokeStyle = '#222222';
+        ctx.lineWidth = 1;
+        for(let x=0; x<canvas.width; x+=50) {
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+        }
+        for(let y=0; y<canvas.height; y+=50) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        }
+
+        // Draw Zero Baseline Reference Axis
+        ctx.strokeStyle = '#444444';
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height/2);
+        ctx.lineTo(canvas.width, canvas.height/2);
+        ctx.stroke();
+
+        const midY = canvas.height / 2;
+        const scaleY = (canvas.height / 2) * (vPeak / 26); // Auto-scaling calculations
+        
+        // Path Arrays for line tracking
+        ctx.lineWidth = 2;
+        
+        // Plot Native input AC Waveform (Green)
+        ctx.strokeStyle = '#00ff00';
+        ctx.beginPath();
+        for(let x = 0; x < canvas.width; x++) {
+            let angle = (x / canvas.width) * 4 * Math.PI * 2; // Show 4 full cycles
+            let y = midY - Math.sin(angle) * scaleY;
+            if(x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Plot Rectified output Waveform (White)
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        
+        let lastOutputY = midY; 
+
+        for(let x = 0; x < canvas.width; x++) {
+            let angle = (x / canvas.width) * 4 * Math.PI * 2;
+            let rawAC = Math.sin(angle) * scaleY;
+            let rectifiedVal = 0;
+
+            // Apply Architectural Topology Logic Mapping
+            if (topology === 'halfwave') {
+                rectifiedVal = rawAC > 0 ? rawAC : 0;
+            } else if (topology === 'fullwave' || topology === 'bridge') {
+                rectifiedVal = Math.abs(rawAC);
+                // Model practical dual diode loss parameters for full bridge systems
+                if(topology === 'bridge' && rectifiedVal > 0) {
+                     rectifiedVal = Math.max(0, rectifiedVal - (0.1 * scaleY)); 
+                }
+            }
+
+            let idealTargetY = midY - rectifiedVal;
+
+            // Model Filter Capacitor charging/discharging mechanics via RC curve emulation
+            if (filterVal > 0 && x > 0) {
+                // Decay calculation mapping filter value inversely to decay speed
+                let decayFactor = 1 - (filterVal / 1100); 
+                let dischargeY = lastOutputY + (midY - lastOutputY) * (1 - decayFactor);
+                
+                // Capacitor Charges instantly to tracking peak, otherwise discharges exponentially
+                if (idealTargetY < dischargeY) {
+                    lastOutputY = idealTargetY;
+                } else {
+                    lastOutputY = dischargeY;
+                }
+            } else {
+                lastOutputY = idealTargetY;
+            }
+
+            if(x === 0) ctx.moveTo(x, lastOutputY); else ctx.lineTo(x, lastOutputY);
+        }
+        ctx.stroke();
+    }
+
+    // Initial run trigger on setup load
+    window.onload = function() {
+        updateSimulation();
+    }
+</script>
+
+</body>
+</html>
