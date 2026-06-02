@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. John Sands - Repository Hub | Moraine Valley Community College</title>
+    <!-- Tailwind CSS for high-fidelity responsive layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom premium styling defaults matching Dr. Sands' branding */
+        :root {
+            --brand-green: #15803d; /* Tailwind green-700 */
+            --brand-black: #0f172a; /* Tailwind slate-900 */
+        }
+        .text-brand-green { color: var(--brand-green); }
+        .bg-brand-green { background-color: var(--brand-green); }
+        .border-brand-green { border-color: var(--brand-green); }
+        .hover\:bg-brand-green-dark:hover { background-color: #166534; }
+        
+        /* Smooth transitions */
+        .tab-transition {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="bg-slate-950 text-white border-b-4 border-green-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-green-700 p-2 rounded-lg text-white">
+                    <i data-lucide="terminal" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Dr. John Sands</h1>
+                    <p class="text-xs text-slate-400 font-mono">Moraine Valley Community College • CIT Dept</p>
+                </div>
+            </div>
+            
+            <!-- SPA Tab Switcher -->
+            <nav class="flex space-x-1 bg-slate-900 p-1.5 rounded-lg border border-slate-800">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 tab-transition bg-green-700 text-white">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Dashboard</span>
+                </button>
+                <button onclick="switchTab('ai-intro')" id="tab-btn-ai-intro" class="px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 tab-transition text-slate-400 hover:text-white">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Intro to AI</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTENT PANELS -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- ================= TAB 1: REPOSITORY DASHBOARD ================= -->
+        <div id="tab-dashboard" class="space-y-8">
+            
+            <!-- Hero Introduction -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="space-y-3 max-w-3xl">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
+                        <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+                        Active Open-Access Learning Repository
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Academic Repository Hub</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        Welcome to the unified educational launchpad. This system serves active course shells, cybersecurity frameworks, and emerging artificial intelligence modules. All courseware listed below is freely shared under non-commercial creative commons paradigms to support community college systems.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-2 min-w-[200px] w-full md:w-auto">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+                        <span class="block text-3xl font-extrabold text-green-700" id="link-count">1</span>
+                        <span class="text-xs text-slate-500 font-mono uppercase tracking-wider">Active Modules</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left 2 Columns: Directory Cards -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="folder-git-2" class="text-green-700 w-5 h-5"></i>
+                            <h3 class="text-lg font-bold text-slate-950">Active Directory Paths</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">root/index.html</span>
+                    </div>
+
+                    <!-- Search / Filter -->
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3.5 top-3.5 text-slate-400 w-5 h-5"></i>
+                        <input type="text" id="moduleSearch" oninput="filterModules()" placeholder="Search active repository modules..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-green-700 transition">
+                    </div>
+
+                    <!-- Repository Cards Grid -->
+                    <div class="grid grid-cols-1 gap-4" id="modulesContainer">
+                        
+                        <!-- Static Integrated Page Module: Intro to AI -->
+                        <div class="group bg-white border-l-4 border-l-green-700 border border-slate-200 rounded-r-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between gap-4">
+                            <div class="space-y-2">
+                                <div class="flex items-start justify-between">
+                                    <h4 class="text-base font-bold text-slate-900 group-hover:text-green-700 transition">
+                                        Introduction to Artificial Intelligence
+                                    </h4>
+                                    <span class="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono uppercase border border-slate-200">
+                                        Core Module
+                                    </span>
+                                </div>
+                                <p class="text-sm text-slate-600 line-clamp-2">
+                                    Analyze the foundational principles of Machine Learning, Deep Neural Networks, and Generative Artificial Intelligence (GenAI). Complete with an interactive learning simulation.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <span class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Tab: Introduction to AI
+                                </span>
+                                <button onclick="switchTab('ai-intro')" class="text-xs font-bold text-green-700 hover:text-green-800 flex items-center gap-1 group">
+                                    Launch Interactive Module 
+                                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Links will be generated here -->
+
+                    </div>
+                </div>
+
+                <!-- Right 1 Column: Manage Page Connections -->
+                <div class="space-y-6">
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="text-green-700 w-5 h-5"></i>
+                            <h3 class="text-lg font-bold text-slate-950 font-sans">Module Manager</h3>
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            Use this deployment panel to program additional URL mappings into your course landing page interface.
+                        </p>
+
+                        <form id="urlForm" onsubmit="handleLinkCreation(event)" class="space-y-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Module Title</label>
+                                <input type="text" id="newTitle" required placeholder="e.g., Module 2: Applied Cybersecurity" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-green-700 focus:bg-white transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target URL Path</label>
+                                <input type="text" id="newUrl" required placeholder="e.g., https://github.com/jsands/..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-green-700 focus:bg-white transition">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Brief Overview Description</label>
+                                <textarea id="newDesc" required rows="3" placeholder="Provide a concise instructional summary for students..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-green-700 focus:bg-white transition"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-950 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2 border border-slate-800 text-sm">
+                                <i data-lucide="link" class="w-4 h-4 text-green-500"></i> Add Page Connection
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Quick Tools & Share -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="share-2" class="text-green-700 w-5 h-5"></i>
+                            <h3 class="text-sm font-bold text-slate-950">Local Export Configuration</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Dynamic links are saved securely to your browser storage. You can backup your structural database layout at any point below.
+                        </p>
+                        <div class="flex gap-2">
+                            <button onclick="exportData()" class="flex-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup JSON
+                            </button>
+                            <button onclick="importDataTrigger()" class="flex-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold py-2 px-3 rounded-md transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="upload" class="w-3.5 h-3.5"></i> Restore
+                            </button>
+                            <input type="file" id="importFile" class="hidden" onchange="handleImport(event)">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: INTRODUCTION TO AI ================= -->
+        <div id="tab-ai-intro" class="hidden space-y-8">
+            
+            <!-- Breadcrumb Navigation -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <button onclick="switchTab('dashboard')" class="text-sm text-slate-500 hover:text-green-700 font-semibold flex items-center gap-1 transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Repository Directory
+                </button>
+                <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+                    <span>CIT Frameworks</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                    <span class="text-green-700 font-bold">Module 1: AI Fundamentals</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Main Textbook Content -->
+                <div class="lg:col-span-2 space-y-8 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm">
+                    <div class="space-y-4">
+                        <div class="inline-block bg-green-50 text-green-700 text-xs px-2.5 py-1 rounded-md font-bold uppercase border border-green-100">
+                            Academic Curriculum Unit
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Module 1: Foundations of Artificial Intelligence</h2>
+                        <p class="text-slate-600 text-base leading-relaxed">
+                            Artificial Intelligence (AI) has rapidly transitioned from computational theory to the core driver of modern technological ecosystems. In this unit, we analyze the architectural divide between mathematical algorithms, machine learning models, and modern large-scale neural transformers.
+                        </p>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Section 1: The AI Paradigm Hierarchy -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-slate-950 flex items-center gap-2">
+                            <span class="bg-slate-100 text-slate-800 text-xs w-6 h-6 flex items-center justify-center rounded-full font-mono font-bold">01</span>
+                            The AI Taxonomy
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Students often conflate Artificial Intelligence, Machine Learning, and Deep Learning. They are best understood as nested domains of capability:
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                            <div class="border border-slate-150 p-4 rounded-xl bg-slate-50">
+                                <h4 class="font-bold text-sm text-slate-950 flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="shield-alert" class="w-4 h-4 text-green-700"></i> Narrow AI
+                                </h4>
+                                <p class="text-xs text-slate-500 leading-normal">
+                                    System architectures engineered and optimized to compute specific target objectives (e.g. chess engines, firewall heuristics).
+                                </p>
+                            </div>
+                            <div class="border border-slate-150 p-4 rounded-xl bg-slate-50">
+                                <h4 class="font-bold text-sm text-slate-950 flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="binary" class="w-4 h-4 text-green-700"></i> Machine Learning
+                                </h4>
+                                <p class="text-xs text-slate-500 leading-normal">
+                                    Algorithms that extract statistical insights directly from raw training datasets without explicit hardcoded instructions.
+                                </p>
+                            </div>
+                            <div class="border border-slate-150 p-4 rounded-xl bg-slate-50">
+                                <h4 class="font-bold text-sm text-slate-950 flex items-center gap-1.5 mb-1">
+                                    <i data-lucide="layers" class="w-4 h-4 text-green-700"></i> Deep Learning
+                                </h4>
+                                <p class="text-xs text-slate-500 leading-normal">
+                                    Multi-layered artificial neural network nodes optimized to process features through weights, biases, and active feedback loops.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Section 2: Interactive AI Agent Simulator -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-950 flex items-center gap-2">
+                                <span class="bg-slate-100 text-slate-800 text-xs w-6 h-6 flex items-center justify-center rounded-full font-mono font-bold">02</span>
+                                Interactive Neural Network Simulator
+                            </h3>
+                            <span class="text-xs text-green-700 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">Live Simulation</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            Experiment with input signals to witness how hidden layers compute weighted mathematical signals. Click on the inputs to toggle their states and observe how information propagates through to the classification output.
+                        </p>
+
+                        <!-- Neural Net Graphic Area -->
+                        <div class="bg-slate-900 border border-slate-950 rounded-xl p-6 text-white space-y-6">
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+                                <span class="text-xs text-slate-400 font-mono">Neural Signal Visualizer (3 Layer Model)</span>
+                                <div class="flex gap-4 text-xs font-mono">
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Positive Weight</span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Weak Weight</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-row justify-around items-center h-48 relative">
+                                <!-- Connection Lines Canvas Backplate -->
+                                <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" id="neural-canvas"></svg>
+
+                                <!-- Input Layer Node Column -->
+                                <div class="flex flex-col justify-around h-full z-10">
+                                    <span class="text-[10px] font-mono text-slate-400 text-center uppercase">Inputs</span>
+                                    <button onclick="toggleInputNode(1)" id="input-node-1" class="w-12 h-12 rounded-full border-2 border-green-500 bg-slate-900 flex flex-col items-center justify-center text-xs font-bold font-mono hover:scale-105 transition shadow-lg text-green-400">
+                                        I<sub>1</sub>
+                                        <span class="text-[9px] font-normal" id="input-val-1">1.0</span>
+                                    </button>
+                                    <button onclick="toggleInputNode(2)" id="input-node-2" class="w-12 h-12 rounded-full border-2 border-slate-500 bg-slate-900 flex flex-col items-center justify-center text-xs font-bold font-mono hover:scale-105 transition shadow-lg text-slate-400">
+                                        I<sub>2</sub>
+                                        <span class="text-[9px] font-normal" id="input-val-2">0.0</span>
+                                    </button>
+                                </div>
+
+                                <!-- Hidden Layer Column -->
+                                <div class="flex flex-col justify-around h-full z-10">
+                                    <span class="text-[10px] font-mono text-slate-400 text-center uppercase">Hidden Layer</span>
+                                    <div class="w-10 h-10 rounded-full border-2 border-slate-600 bg-slate-950 flex items-center justify-center text-xs font-mono text-slate-300" id="hidden-node-1">H<sub>1</sub></div>
+                                    <div class="w-10 h-10 rounded-full border-2 border-slate-600 bg-slate-950 flex items-center justify-center text-xs font-mono text-slate-300" id="hidden-node-2">H<sub>2</sub></div>
+                                    <div class="w-10 h-10 rounded-full border-2 border-slate-600 bg-slate-950 flex items-center justify-center text-xs font-mono text-slate-300" id="hidden-node-3">H<sub>3</sub></div>
+                                </div>
+
+                                <!-- Output Layer Column -->
+                                <div class="flex flex-col justify-around h-full z-10">
+                                    <span class="text-[10px] font-mono text-slate-400 text-center uppercase">Output</span>
+                                    <div class="w-14 h-14 rounded-full border-4 border-slate-600 bg-slate-950 flex flex-col items-center justify-center text-xs font-bold font-mono text-slate-200 transition-all duration-300" id="output-node">
+                                        Y
+                                        <span class="text-[9px] font-normal" id="output-val">0.65</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-xs bg-slate-950 p-4 rounded-lg border border-slate-800 leading-normal text-slate-300 space-y-2">
+                                <p><strong>Simulation Mechanics:</strong> Information passes forward. Hidden Layer activations are derived by passing the raw dot product inputs through a mathematical activation equation: 
+                                <span class="block text-center my-1.5 text-green-400 font-mono">$$\text{Activation}(x) = \sigma\left(\sum(x_i \cdot w_i) + b\right)$$</span>
+                                Click the input layer circles to trigger input state fluctuations and observe output activation modifications.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Section 3: AI Cybersecurity Ramifications -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-slate-950 flex items-center gap-2">
+                            <span class="bg-slate-100 text-slate-800 text-xs w-6 h-6 flex items-center justify-center rounded-full font-mono font-bold">03</span>
+                            The Intersection of AI and Cybersecurity
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">
+                            As a core element of cybersecurity education, securing machine learning modules is paramount. This intersection features dual challenges:
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition">
+                                <div class="p-2 rounded bg-red-50 text-red-600 h-fit">
+                                    <i data-lucide="shield-x" class="w-5 h-5"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h4 class="font-bold text-sm text-slate-950">Adversarial Data Ingestion & Poisoning</h4>
+                                    <p class="text-xs text-slate-500 leading-relaxed">
+                                        Adversaries systematically craft corrupted datasets during model optimization training cycles to establish reliable backdoors inside classification layers.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition">
+                                <div class="p-2 rounded bg-green-50 text-green-700 h-fit">
+                                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h4 class="font-bold text-sm text-slate-950">Autonomous Defensive Heuristics</h4>
+                                    <p class="text-xs text-slate-500 leading-relaxed">
+                                        Utilizing fine-tuned pattern monitoring systems to identify atypical outbound enterprise payload distributions and anomalies faster than standard manual threat hunters.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Progress Sidebar -->
+                <div class="space-y-6">
+                    <!-- Unit Comprehension Assessment -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="help-circle" class="text-green-700 w-5 h-5"></i>
+                            <h3 class="text-lg font-bold text-slate-950">Quick Knowledge Check</h3>
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            Verify your understanding of foundational AI topics with this interactive review.
+                        </p>
+
+                        <div class="space-y-4" id="quiz-container">
+                            <div class="space-y-2">
+                                <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Question 1</p>
+                                <p class="text-sm font-semibold text-slate-900 leading-relaxed">
+                                    Which component of AI leverages nested node layers and weights to model highly dimensional input data?
+                                </p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <button onclick="selectAnswer(this, false)" class="w-full text-left p-3 border border-slate-200 rounded-lg text-xs hover:bg-slate-50 font-medium transition flex items-center justify-between">
+                                    Narrow Heuristics Engines
+                                    <i data-lucide="circle" class="w-4 h-4 text-slate-300"></i>
+                                </button>
+                                <button onclick="selectAnswer(this, false)" class="w-full text-left p-3 border border-slate-200 rounded-lg text-xs hover:bg-slate-50 font-medium transition flex items-center justify-between">
+                                    Classic Linear Regression Models
+                                    <i data-lucide="circle" class="w-4 h-4 text-slate-300"></i>
+                                </button>
+                                <button onclick="selectAnswer(this, true)" class="w-full text-left p-3 border border-slate-200 rounded-lg text-xs hover:bg-slate-50 font-medium transition flex items-center justify-between">
+                                    Deep Learning Architectures
+                                    <i data-lucide="circle" class="w-4 h-4 text-slate-300"></i>
+                                </button>
+                            </div>
+
+                            <div id="quiz-feedback" class="hidden text-xs p-3.5 rounded-lg border"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox Metadata -->
+                    <div class="bg-slate-100 border border-slate-200 rounded-xl p-6 space-y-4">
+                        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Unit Completion Metrics</h4>
+                        <ul class="space-y-2.5 text-xs text-slate-600">
+                            <li class="flex items-center justify-between">
+                                <span>Estimated Reading Speed:</span>
+                                <span class="font-bold text-slate-900">~6 mins</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>Curriculum Standard Match:</span>
+                                <span class="font-mono text-green-700 bg-white border border-slate-200 px-1.5 py-0.5 rounded font-bold">ABET/CAC</span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span>Instructional Scope:</span>
+                                <span class="font-bold text-slate-900 text-right">Academic Foundations</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER / LICENSE METRICS -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-12 text-slate-500 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-1.5 text-center md:text-left">
+                <p class="font-bold text-slate-800 flex items-center justify-center md:justify-start gap-1.5">
+                    <i data-lucide="award" class="w-4 h-4 text-green-700"></i>
+                    Dr. John Sands • Professor & Director of Cybersecurity Center
+                </p>
+                <p>Moraine Valley Community College — Department of Computer Integrated Technologies</p>
+                <p class="font-mono text-[10px] text-slate-400">Palos Hills, IL • Established Academic Hub</p>
+            </div>
+            <div class="flex flex-col items-center md:items-end gap-2 text-center md:text-right">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-slate-900 text-white font-bold font-mono tracking-wider border border-slate-800">
+                    CC BY-NC 4.0
+                </span>
+                <p class="max-w-xs text-slate-400 text-[10px] leading-relaxed">
+                    Licensed under Creative Commons. Free distribution and adaptation are permitted. Commercial sale or monetary distribution is strictly prohibited.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST ALERTS -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-lg shadow-xl border border-slate-800 text-sm flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-500" id="toast-icon"></i>
+        <span id="toast-text">Configuration loaded successfully!</span>
+    </div>
+
+    <!-- MAIN JAVASCRIPT STATE ENGINE -->
+    <script>
+        // Setup state vectors
+        let linkData = [];
+        
+        // Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadLinks();
+            updateTotalLinksBadge();
+            renderNeuralSim();
+        });
+
+        // Toggle state tabs for clean SPA experience
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'ai-intro'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    // Styling activation states matching brand guidelines
+                    btn.className = "px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 tab-transition bg-green-700 text-white";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 tab-transition text-slate-400 hover:text-white";
+                }
+            });
+            // Re-render simulator if drawing on dynamic canvas is needed
+            if (tabId === 'ai-intro') {
+                setTimeout(renderNeuralSim, 50);
+            }
+        }
+
+        // --- MODULE LINKS CONTROLLER ---
+        function loadLinks() {
+            const raw = localStorage.getItem('sands_repo_links');
+            if (raw) {
+                try {
+                    linkData = JSON.parse(raw);
+                } catch(e) {
+                    linkData = [];
+                }
+            }
+            renderLinks();
+        }
+
+        function saveLinks() {
+            localStorage.setItem('sands_repo_links', JSON.stringify(linkData));
+            updateTotalLinksBadge();
+        }
+
+        function renderLinks() {
+            // Select directory holder
+            const container = document.getElementById('modulesContainer');
+            
+            // Clean up any dynamically generated items before re-rendering
+            const dynamicCards = container.querySelectorAll('.dynamic-card');
+            dynamicCards.forEach(card => card.remove());
+
+            linkData.forEach((link, idx) => {
+                const card = document.createElement('div');
+                card.className = "dynamic-card group bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between gap-4";
+                card.id = `module-card-${link.id}`;
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-start justify-between">
+                            <h4 class="text-base font-bold text-slate-900 group-hover:text-green-700 transition line-clamp-1">
+                                ${escapeHTML(link.title)}
+                            </h4>
+                            <button onclick="removeModuleLink('${link.id}')" class="text-slate-400 hover:text-red-600 transition" title="Delete Connection">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-600 line-clamp-2">
+                            ${escapeHTML(link.desc)}
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-mono text-slate-400 flex items-center gap-1 max-w-[70%] truncate">
+                            <i data-lucide="link" class="w-3.5 h-3.5"></i> ${escapeHTML(link.url)}
+                        </span>
+                        <a href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-slate-900 hover:text-green-700 flex items-center gap-1 group">
+                            Access Resource 
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"></i>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function handleLinkCreation(e) {
+            e.preventDefault();
+            const titleEl = document.getElementById('newTitle');
+            const urlEl = document.getElementById('newUrl');
+            const descEl = document.getElementById('newDesc');
+
+            const newModule = {
+                id: 'mod_' + Date.now(),
+                title: titleEl.value.trim(),
+                url: urlEl.value.trim(),
+                desc: descEl.value.trim()
+            };
+
+            linkData.push(newModule);
+            saveLinks();
+            renderLinks();
+
+            // Clear Form Elements
+            titleEl.value = '';
+            urlEl.value = '';
+            descEl.value = '';
+
+            triggerToast("Successfully added resource path to dashboard directory!");
+        }
+
+        function removeModuleLink(id) {
+            linkData = linkData.filter(link => link.id !== id);
+            saveLinks();
+            renderLinks();
+            triggerToast("Link dropped from tracking system.", true);
+        }
+
+        function filterModules() {
+            const query = document.getElementById('moduleSearch').value.toLowerCase().trim();
+            const cards = document.getElementById('modulesContainer').children;
+            
+            for (let card of cards) {
+                // Read text metrics within current card context
+                const titleText = card.querySelector('h4')?.textContent.toLowerCase() || '';
+                const descText = card.querySelector('p')?.textContent.toLowerCase() || '';
+                if (titleText.includes(query) || descText.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        }
+
+        function updateTotalLinksBadge() {
+            document.getElementById('link-count').textContent = linkData.length + 1; // Include static AI module
+        }
+
+        // --- BACKUP & RESTORE MODULES ---
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(linkData));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `sands_repository_backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            triggerToast("Repository database JSON downloaded!");
+        }
+
+        function importDataTrigger() {
+            document.getElementById('importFile').click();
+        }
+
+        function handleImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (Array.isArray(parsed)) {
+                        linkData = parsed;
+                        saveLinks();
+                        renderLinks();
+                        triggerToast("Repository connections successfully restored!");
+                    } else {
+                        throw new Error("Invalid format");
+                    }
+                } catch(err) {
+                    triggerToast("Import failed. Invalid database JSON structure.", true);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- INTERACTIVE AI SIMULATOR (Tab 2) ---
+        let inputValues = [1.0, 0.0];
+        let weights = [
+            [0.8, 0.2, -0.5], // weights from Input 1 to H1, H2, H3
+            [-0.3, 0.9, 0.1]  // weights from Input 2 to H1, H2, H3
+        ];
+        let hiddenWeights = [0.9, -0.6, 0.7]; // weights from H1, H2, H3 to Output Y
+        let bias = -0.1;
+
+        function toggleInputNode(index) {
+            const actualIdx = index - 1;
+            inputValues[actualIdx] = inputValues[actualIdx] === 1.0 ? 0.0 : 1.0;
+            
+            // Render changes in DOM
+            const node = document.getElementById(`input-node-${index}`);
+            const text = document.getElementById(`input-val-${index}`);
+            
+            text.textContent = inputValues[actualIdx].toFixed(1);
+            if (inputValues[actualIdx] === 1.0) {
+                node.className = "w-12 h-12 rounded-full border-2 border-green-500 bg-slate-900 flex flex-col items-center justify-center text-xs font-bold font-mono hover:scale-105 transition shadow-lg text-green-400";
+            } else {
+                node.className = "w-12 h-12 rounded-full border-2 border-slate-500 bg-slate-900 flex flex-col items-center justify-center text-xs font-bold font-mono hover:scale-105 transition shadow-lg text-slate-400";
+            }
+
+            renderNeuralSim();
+        }
+
+        function renderNeuralSim() {
+            // 1. Calculate hidden nodes activation
+            let hActivations = [0, 0, 0];
+            for (let h = 0; h < 3; h++) {
+                let sum = 0;
+                for (let i = 0; i < 2; i++) {
+                    sum += inputValues[i] * weights[i][h];
+                }
+                // Sigmoid Activation
+                hActivations[h] = 1 / (1 + Math.exp(-sum));
+                
+                // Update UI Node border/glow intensity matching calculations
+                const nodeEl = document.getElementById(`hidden-node-${h + 1}`);
+                if (nodeEl) {
+                    const intense = Math.floor(hActivations[h] * 255);
+                    nodeEl.style.borderColor = `rgb(${intense}, 128, ${255 - intense})`;
+                }
+            }
+
+            // 2. Calculate final output Y
+            let finalSum = bias;
+            for (let h = 0; h < 3; h++) {
+                finalSum += hActivations[h] * hiddenWeights[h];
+            }
+            let outputY = 1 / (1 + Math.exp(-finalSum));
+
+            // 3. Render Output Node Value
+            const outNode = document.getElementById('output-node');
+            const outVal = document.getElementById('output-val');
+            
+            if (outNode && outVal) {
+                outVal.textContent = outputY.toFixed(2);
+                
+                // Animate borders based on calculated value bounds
+                if (outputY > 0.5) {
+                    outNode.style.borderColor = "#15803d"; // Deep Forest green
+                    outNode.classList.add("shadow-[0_0_15px_rgba(22,163,74,0.5)]");
+                } else {
+                    outNode.style.borderColor = "#475569"; // Steel slate
+                    outNode.classList.remove("shadow-[0_0_15px_rgba(22,163,74,0.5)]");
+                }
+            }
+
+            // 4. Draw SVG Connection Vectors dynamically
+            const svg = document.getElementById('neural-canvas');
+            if (svg) {
+                svg.innerHTML = ''; // reset SVG backplate
+                
+                const drawLine = (x1, y1, x2, y2, weightVal) => {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", x1);
+                    line.setAttribute("y1", y1);
+                    line.setAttribute("x2", x2);
+                    line.setAttribute("y2", y2);
+                    line.setAttribute("stroke", weightVal > 0 ? "#22c55e" : "#f59e0b");
+                    line.setAttribute("stroke-width", Math.max(1, Math.abs(weightVal) * 3));
+                    svg.appendChild(line);
+                };
+
+                // Approximate SVG dynamic dimensions mapping to node elements positioning
+                const rect = svg.getBoundingClientRect();
+                const w = rect.width;
+                const h = rect.height;
+
+                if (w > 0 && h > 0) {
+                    // Coordinates mapping matrices
+                    const xInput = w * 0.15;
+                    const xHidden = w * 0.50;
+                    const xOutput = w * 0.85;
+
+                    const yInputs = [h * 0.35, h * 0.70];
+                    const yHiddens = [h * 0.25, h * 0.52, h * 0.78];
+                    const yOutput = h * 0.52;
+
+                    // Input -> Hidden Connections
+                    for (let i = 0; i < 2; i++) {
+                        for (let hNode = 0; hNode < 3; hNode++) {
+                            // Scale vector visibility with actual signal strength
+                            if (inputValues[i] > 0) {
+                                drawLine(xInput, yInputs[i], xHidden, yHiddens[hNode], weights[i][hNode]);
+                            }
+                        }
+                    }
+
+                    // Hidden -> Output Connections
+                    for (let hNode = 0; hNode < 3; hNode++) {
+                        drawLine(xHidden, yHiddens[hNode], xOutput, yOutput, hiddenWeights[hNode] * hActivations[hNode]);
+                    }
+                }
+            }
+        }
+
+        // Re-calculate simulation coordinates on viewport scaling mutations
+        window.addEventListener('resize', renderNeuralSim);
+
+        // --- REINFORCEMENT KNOWLEDGE CHECK ---
+        function selectAnswer(btnElement, isCorrect) {
+            const container = btnElement.parentElement;
+            const buttons = container.querySelectorAll('button');
+            const feedback = document.getElementById('quiz-feedback');
+
+            buttons.forEach(btn => {
+                btn.className = "w-full text-left p-3 border border-slate-200 rounded-lg text-xs font-medium transition flex items-center justify-between pointer-events-none opacity-60";
+                btn.querySelector('i').setAttribute('data-lucide', 'circle');
+            });
+
+            if (isCorrect) {
+                btnElement.className = "w-full text-left p-3 border border-green-500 bg-green-50 rounded-lg text-xs font-bold text-green-800 transition flex items-center justify-between pointer-events-none";
+                btnElement.querySelector('i').setAttribute('data-lucide', 'check-circle');
+                
+                feedback.className = "text-xs p-3.5 rounded-lg border border-green-200 bg-green-50/50 text-green-800 leading-normal";
+                feedback.innerHTML = "<strong>Correct Selection!</strong> Deep neural networks scale computational layers using backpropagation optimization to extract abstract layers from multi-dimensional datasets.";
+            } else {
+                btnElement.className = "w-full text-left p-3 border border-red-500 bg-red-50 rounded-lg text-xs font-bold text-red-800 transition flex items-center justify-between pointer-events-none";
+                btnElement.querySelector('i').setAttribute('data-lucide', 'x-circle');
+                
+                feedback.className = "text-xs p-3.5 rounded-lg border border-red-200 bg-red-50/50 text-red-800 leading-normal";
+                feedback.innerHTML = "<strong>Incorrect Selection.</strong> Try reviewing Section 1 hierarchy parameters. Deep learning relies specifically on layered nodes with weight optimization configurations.";
+            }
+            feedback.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // --- UTILITY FRAMEWORKS ---
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        function triggerToast(message, isAlert = false) {
+            const toast = document.getElementById('toast');
+            const text = document.getElementById('toast-text');
+            const icon = document.getElementById('toast-icon');
+
+            text.textContent = message;
+            
+            if (isAlert) {
+                icon.className = "w-4 h-4 text-amber-500";
+                icon.setAttribute('data-lucide', 'alert-triangle');
+            } else {
+                icon.className = "w-4 h-4 text-green-500";
+                icon.setAttribute('data-lucide', 'check-circle');
+            }
+            lucide.createIcons();
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
